@@ -60,15 +60,15 @@ export default function ProfileSection() {
       const allGames =
         platform === "chess.com"
           ? await getChessComUserRecentGames(
-              username,
-              undefined,
-              games.length + 20
-            )
+            username,
+            undefined,
+            games.length + 20
+          )
           : await getLichessUserRecentGames(
-              username,
-              undefined,
-              games.length + 20
-            );
+            username,
+            undefined,
+            games.length + 20
+          );
 
       if (allGames.length === games.length) {
         setHasMore(false);

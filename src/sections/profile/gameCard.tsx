@@ -8,9 +8,6 @@ import {
   Chip,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { useSetAtom } from "jotai";
-import { gameAtom } from "@/sections/analysis/states";
-import { getGameFromPgn } from "@/lib/chess";
 
 interface Props {
   game: LoadedGame;
@@ -19,7 +16,6 @@ interface Props {
 
 export default function GameCard({ game, username }: Props) {
   const router = useRouter();
-  const setGame = useSetAtom(gameAtom);
 
   const whiteWon = game.result === "1-0";
   const blackWon = game.result === "0-1";
@@ -29,8 +25,6 @@ export default function GameCard({ game, username }: Props) {
   const userLost = (isUserWhite && blackWon) || (!isUserWhite && whiteWon);
 
   const handleAnalyze = () => {
-    const chessGame = getGameFromPgn(game.pgn);
-    setGame(chessGame);
     const orientation = isUserWhite ? "white" : "black";
     const data = btoa(
       JSON.stringify({ id: game.id, pgn: game.pgn, orientation })

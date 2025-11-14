@@ -22,6 +22,7 @@ export default function LoadGame() {
   const { resetToStartingPosition: resetBoard } = useChessActions(boardAtom);
   const setEval = useSetAtom(gameEvalAtom);
   const setBoardOrientation = useSetAtom(boardOrientationAtom);
+  const boardOrientation = useAtomValue(boardOrientationAtom);
   const evaluationProgress = useAtomValue(evaluationProgressAtom);
 
   const joinedGameHistory = useMemo(() => game.history().join(), [game]);
@@ -30,14 +31,22 @@ export default function LoadGame() {
     (pgn: string, orientation?: boolean, gameEval?: GameEval) => {
       const gameFromPgn = new Chess();
       gameFromPgn.loadPgn(pgn);
-      if (joinedGameHistory === gameFromPgn.history().join()) return;
+      const newOrientation = orientation ?? true;
+
+      // If same game but different orientation, update orientation only
+      if (joinedGameHistory === gameFromPgn.history().join()) {
+        if (boardOrientation !== newOrientation) {
+          setBoardOrientation(newOrientation);
+        }
+        return;
+      }
 
       resetBoard(pgn);
       setEval(gameEval);
       setGamePgn(pgn);
-      setBoardOrientation(orientation ?? true);
+      setBoardOrientation(newOrientation);
     },
-    [joinedGameHistory, resetBoard, setGamePgn, setEval, setBoardOrientation]
+    [joinedGameHistory, resetBoard, setGamePgn, setEval, setBoardOrientation, boardOrientation]
   );
 
   const {
@@ -51,6 +60,9 @@ export default function LoadGame() {
   } = router.query;
 
   useEffect(() => {
+    // Wait for router to be ready before attempting to load game
+    if (!router.isReady) return;
+
     const handleLichess = async (id: string) => {
       const res = await fetchLichessGame(id);
       if (typeof res === "string") {

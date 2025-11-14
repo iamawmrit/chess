@@ -25,6 +25,9 @@ export default function GameAnalysis() {
   const showMovesTab = game.history().length > 0 || board.history().length > 0;
 
   useEffect(() => {
+    // Wait for router to be ready before checking URL params
+    if (!router.isReady) return;
+
     const { pgn, lichessGameId, gameId, platform, id, g } = router.query;
     const hasUrlParams = pgn || lichessGameId || gameId || platform || id || g;
 
