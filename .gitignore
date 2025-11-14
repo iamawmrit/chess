@@ -20,7 +20,3 @@ tsconfig.tsbuildinfo
 .cdk.staging
 cdk.out
 cdk.context.json
-# Large Stockfish engine files (>50MB)
-public/engines/stockfish-16.1/*.wasm
-public/engines/stockfish-16/*.wasm
-public/engines/stockfish-17/*.wasm
