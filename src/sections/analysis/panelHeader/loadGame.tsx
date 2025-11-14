@@ -70,6 +70,19 @@ export default function LoadGame() {
     // Wait for router to be ready before attempting to load game
     if (!router.isReady) return;
 
+    // Fallback: Parse URL directly for production builds
+    const getQueryParam = (param: string): string | undefined => {
+      if (router.query[param]) {
+        return router.query[param] as string;
+      }
+      // Fallback for production
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param) || undefined;
+      }
+      return undefined;
+    };
+
     const handleLichess = async (id: string) => {
       const res = await fetchLichessGame(id);
       if (typeof res === "string") {
@@ -87,17 +100,25 @@ export default function LoadGame() {
     };
 
     const loadGame = async () => {
-      if (typeof g === "string" && !!g) {
+      // Check both router.query and direct URL parsing
+      const gParam = getQueryParam('g');
+      const idParam = getQueryParam('id');
+      const pgnParamValue = getQueryParam('pgn');
+      const lichessGameIdValue = getQueryParam('lichessGameId');
+      const gameIdValue = getQueryParam('gameId');
+      const platformValue = getQueryParam('platform');
+
+      if (typeof gParam === "string" && !!gParam) {
         try {
-          const { pgn, orientation } = JSON.parse(atob(g));
+          const { pgn, orientation } = JSON.parse(atob(gParam));
           if (pgn) {
             resetAndSetGamePgn(pgn, orientation === "white");
           }
         } catch (e) {
           console.error("Failed to decode game data", e);
         }
-      } else if (typeof id === "string" && !!id) {
-        const stored = localStorage.getItem(`game_${id}`);
+      } else if (typeof idParam === "string" && !!idParam) {
+        const stored = localStorage.getItem(`game_${idParam}`);
         if (stored) {
           const {
             id: actualId,
@@ -119,16 +140,16 @@ export default function LoadGame() {
             }
           }
         }
-      } else if (typeof pgnParam === "string" && !!pgnParam) {
+      } else if (typeof pgnParamValue === "string" && !!pgnParamValue) {
         const orientation = orientationParam === "white" || !orientationParam;
-        resetAndSetGamePgn(decodeURIComponent(pgnParam), orientation);
-      } else if (typeof lichessGameId === "string" && !!lichessGameId) {
-        handleLichess(lichessGameId);
-      } else if (typeof gameId === "string" && typeof platform === "string") {
-        if (platform === "lichess") {
-          handleLichess(gameId);
-        } else if (platform === "chess.com") {
-          handleChessCom(gameId);
+        resetAndSetGamePgn(decodeURIComponent(pgnParamValue), orientation);
+      } else if (typeof lichessGameIdValue === "string" && !!lichessGameIdValue) {
+        handleLichess(lichessGameIdValue);
+      } else if (typeof gameIdValue === "string" && typeof platformValue === "string") {
+        if (platformValue === "lichess") {
+          handleLichess(gameIdValue);
+        } else if (platformValue === "chess.com") {
+          handleChessCom(gameIdValue);
         }
       }
     };

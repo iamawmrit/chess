@@ -31,12 +31,22 @@ export default function GameAnalysis() {
     const { pgn, lichessGameId, gameId, platform, id, g } = router.query;
     const hasUrlParams = pgn || lichessGameId || gameId || platform || id || g;
 
-    if (!hasUrlParams && !showMovesTab) {
+    // Also check the actual browser URL as fallback for production
+    const urlHasParams = typeof window !== 'undefined' &&
+      (window.location.search.includes('pgn=') ||
+        window.location.search.includes('g=') ||
+        window.location.search.includes('id=') ||
+        window.location.search.includes('gameId=') ||
+        window.location.search.includes('lichessGameId='));
+
+    if (!hasUrlParams && !urlHasParams && !showMovesTab) {
+      // Increase timeout for production builds where hydration may be slower
       const timer = setTimeout(() => {
-        if (!showMovesTab) {
+        // Double-check before redirecting
+        if (!showMovesTab && !window.location.search) {
           router.replace("/");
         }
-      }, 500);
+      }, 1500);
       return () => clearTimeout(timer);
     }
     return undefined;
