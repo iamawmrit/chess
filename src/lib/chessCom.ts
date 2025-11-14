@@ -4,8 +4,8 @@ import { LoadedGame } from "@/types/game";
 
 export const getChessComUserRecentGames = async (
   username: string,
-  limit = 20,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  limit = 20
 ): Promise<LoadedGame[]> => {
   const games: ChessComGame[] = [];
   const date = new Date();

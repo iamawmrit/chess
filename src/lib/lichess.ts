@@ -65,7 +65,9 @@ export const getLichessUserProfile = async (
     const data = await res.json();
     return {
       name: data.username || username,
-      avatar: data.profile?.avatar ? `https://lichess1.org/image/${data.username}.jpg` : undefined,
+      avatar: data.profile?.avatar
+        ? `https://lichess1.org/image/${data.username}.jpg`
+        : undefined,
     };
   } catch {
     return null;
@@ -74,8 +76,8 @@ export const getLichessUserProfile = async (
 
 export const getLichessUserRecentGames = async (
   username: string,
-  limit = 20,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  limit = 20
 ): Promise<LoadedGame[]> => {
   const res = await fetch(
     `https://lichess.org/api/games/user/${username}?until=${Date.now()}&max=${limit}&pgnInJson=true&sort=dateDesc&clocks=true`,

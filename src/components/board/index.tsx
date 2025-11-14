@@ -283,14 +283,17 @@ export default function Board({
     return commonBoardStyle;
   }, [boardHue]);
 
-  const customSquareStyles = useMemo(() => ({
-    light: {
-      backgroundColor: '#cbd5e0',
-    },
-    dark: {
-      backgroundColor: '#7b95ab',
-    }
-  }), []);
+  const customSquareStyles = useMemo(
+    () => ({
+      light: {
+        backgroundColor: "#cbd5e0",
+      },
+      dark: {
+        backgroundColor: "#7b95ab",
+      },
+    }),
+    []
+  );
 
   return (
     <Grid

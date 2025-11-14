@@ -5,13 +5,7 @@ import AnalysisTab from "@/sections/analysis/panelBody/analysisTab";
 import ClassificationTab from "@/sections/analysis/panelBody/classificationTab";
 import MovesPanel from "@/sections/analysis/panelBody/classificationTab/movesPanel";
 import { boardAtom, gameAtom, gameEvalAtom } from "@/sections/analysis/states";
-import {
-  Box,
-  Divider,
-  Grid2 as Grid,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { Box, Divider, Grid2 as Grid, Tab, Tabs } from "@mui/material";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
@@ -51,7 +45,13 @@ export default function GameAnalysis() {
   }, [showMovesTab, gameEval, tab]);
 
   return (
-    <Grid container gap={2} justifyContent="center" alignItems="start" flexWrap={{ xs: "wrap", lg: "nowrap" }}>
+    <Grid
+      container
+      gap={2}
+      justifyContent="center"
+      alignItems="start"
+      flexWrap={{ xs: "wrap", lg: "nowrap" }}
+    >
       <PageTitle title="Chessrith Game Analysis" />
 
       {/* Left Panel - Analysis & Engine Lines with Moves List Below */}
@@ -85,11 +85,7 @@ export default function GameAnalysis() {
           <Divider sx={{ marginX: "5%", marginTop: 2.5 }} />
         </Box>
 
-        <AnalysisTab
-          role="tabpanel"
-          hidden={false}
-          id="tabContent0-left"
-        />
+        <AnalysisTab role="tabpanel" hidden={false} id="tabContent0-left" />
 
         {showMovesTab && (
           <>
@@ -135,11 +131,7 @@ export default function GameAnalysis() {
       >
         {gameEval && (
           <>
-            <GraphTab
-              role="tabpanel"
-              hidden={false}
-              id="tabContent2-right"
-            />
+            <GraphTab role="tabpanel" hidden={false} id="tabContent2-right" />
             <Divider sx={{ marginX: "5%", marginY: 2 }} />
           </>
         )}
@@ -182,9 +174,7 @@ export default function GameAnalysis() {
         <PanelToolBar key="review-panel-toolbar-mobile" />
 
         {!gameEval && <Divider sx={{ marginX: "5%" }} />}
-        {!gameEval && (
-          <PanelHeader key="analysis-panel-header-mobile" />
-        )}
+        {!gameEval && <PanelHeader key="analysis-panel-header-mobile" />}
 
         <Box
           width="95%"
@@ -244,11 +234,7 @@ export default function GameAnalysis() {
           </Tabs>
         </Box>
 
-        <GraphTab
-          role="tabpanel"
-          hidden={tab !== 2}
-          id="tabContent2-mobile"
-        />
+        <GraphTab role="tabpanel" hidden={tab !== 2} id="tabContent2-mobile" />
 
         <AnalysisTab
           role="tabpanel"

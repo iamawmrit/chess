@@ -40,7 +40,15 @@ export default function LoadGame() {
     [joinedGameHistory, resetBoard, setGamePgn, setEval, setBoardOrientation]
   );
 
-  const { lichessGameId, pgn: pgnParam, orientation: orientationParam, gameId, platform, id, g } = router.query;
+  const {
+    lichessGameId,
+    pgn: pgnParam,
+    orientation: orientationParam,
+    gameId,
+    platform,
+    id,
+    g,
+  } = router.query;
 
   useEffect(() => {
     const handleLichess = async (id: string) => {
@@ -72,7 +80,12 @@ export default function LoadGame() {
       } else if (typeof id === "string" && !!id) {
         const stored = localStorage.getItem(`game_${id}`);
         if (stored) {
-          const { id: actualId, platform: actualPlatform, orientation: actualOrientation, pgn } = JSON.parse(stored);
+          const {
+            id: actualId,
+            platform: actualPlatform,
+            orientation: actualOrientation,
+            pgn,
+          } = JSON.parse(stored);
           if (pgn) {
             resetAndSetGamePgn(pgn, actualOrientation === "white");
           } else if (actualPlatform === "lichess") {
@@ -102,7 +115,16 @@ export default function LoadGame() {
     };
 
     loadGame();
-  }, [pgnParam, lichessGameId, orientationParam, gameId, platform, id, g, resetAndSetGamePgn]);
+  }, [
+    pgnParam,
+    lichessGameId,
+    orientationParam,
+    gameId,
+    platform,
+    id,
+    g,
+    resetAndSetGamePgn,
+  ]);
 
   useEffect(() => {
     const eventHandler = (event: MessageEvent) => {

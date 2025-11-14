@@ -15,10 +15,9 @@ import { getGameFromPgn } from "@/lib/chess";
 interface Props {
   game: LoadedGame;
   username: string;
-  platform: "chess.com" | "lichess";
 }
 
-export default function GameCard({ game, username, platform }: Props) {
+export default function GameCard({ game, username }: Props) {
   const router = useRouter();
   const setGame = useSetAtom(gameAtom);
 
@@ -33,7 +32,9 @@ export default function GameCard({ game, username, platform }: Props) {
     const chessGame = getGameFromPgn(game.pgn);
     setGame(chessGame);
     const orientation = isUserWhite ? "white" : "black";
-    const data = btoa(JSON.stringify({ id: game.id, pgn: game.pgn, orientation }));
+    const data = btoa(
+      JSON.stringify({ id: game.id, pgn: game.pgn, orientation })
+    );
     router.push(`/analysis?g=${data}`);
   };
 
@@ -53,17 +54,34 @@ export default function GameCard({ game, username, platform }: Props) {
         {game.result && (
           <Box mb={2}>
             <Chip
-              label={isDraw ? "Draw" : userWon ? "Won" : userLost ? "Lost" : game.result}
+              label={
+                isDraw
+                  ? "Draw"
+                  : userWon
+                    ? "Won"
+                    : userLost
+                      ? "Lost"
+                      : game.result
+              }
               size="small"
               sx={{
-                backgroundColor: userWon ? "success.main" : userLost ? "error.main" : "default",
+                backgroundColor: userWon
+                  ? "success.main"
+                  : userLost
+                    ? "error.main"
+                    : "default",
                 color: userWon || userLost ? "white" : "inherit",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             />
           </Box>
         )}
-        <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="start"
+          mb={2}
+        >
           <Box display="flex" alignItems="center" gap={1}>
             <Box
               sx={{
@@ -89,7 +107,12 @@ export default function GameCard({ game, username, platform }: Props) {
           vs
         </Typography>
 
-        <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="start"
+          mb={2}
+        >
           <Box display="flex" alignItems="center" gap={1}>
             <Box
               sx={{

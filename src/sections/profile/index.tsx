@@ -3,8 +3,14 @@ import { Box, Container, Avatar, Typography, Paper } from "@mui/material";
 import UsernameInput from "./usernameInput";
 import GamesList from "./gamesList";
 import { LoadedGame } from "@/types/game";
-import { getChessComUserRecentGames, getChessComUserAvatar } from "@/lib/chessCom";
-import { getLichessUserRecentGames, getLichessUserProfile } from "@/lib/lichess";
+import {
+  getChessComUserRecentGames,
+  getChessComUserAvatar,
+} from "@/lib/chessCom";
+import {
+  getLichessUserRecentGames,
+  getLichessUserProfile,
+} from "@/lib/lichess";
 
 export default function ProfileSection() {
   const [games, setGames] = useState<LoadedGame[]>(() => {
@@ -17,7 +23,10 @@ export default function ProfileSection() {
   const [username, setUsername] = useState("");
   const [platform, setPlatform] = useState<"chess.com" | "lichess">(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("chess-platform") as "chess.com" | "lichess") || "chess.com";
+      return (
+        (localStorage.getItem("chess-platform") as "chess.com" | "lichess") ||
+        "chess.com"
+      );
     }
     return "chess.com";
   });
@@ -45,13 +54,22 @@ export default function ProfileSection() {
 
   const loadMoreGames = async () => {
     if (!username || loading || !hasMore) return;
-    
+
     setLoading(true);
     try {
-      const allGames = platform === "chess.com"
-        ? await getChessComUserRecentGames(username, games.length + 20)
-        : await getLichessUserRecentGames(username, games.length + 20);
-      
+      const allGames =
+        platform === "chess.com"
+          ? await getChessComUserRecentGames(
+              username,
+              undefined,
+              games.length + 20
+            )
+          : await getLichessUserRecentGames(
+              username,
+              undefined,
+              games.length + 20
+            );
+
       if (allGames.length === games.length) {
         setHasMore(false);
       } else {
@@ -67,17 +85,18 @@ export default function ProfileSection() {
 
   const refreshGames = async () => {
     if (!username || loading) return;
-    
+
     setLoading(true);
     try {
-      const newGames = platform === "chess.com"
-        ? await getChessComUserRecentGames(username, 20)
-        : await getLichessUserRecentGames(username, 20);
-      
+      const newGames =
+        platform === "chess.com"
+          ? await getChessComUserRecentGames(username, undefined, 20)
+          : await getLichessUserRecentGames(username, undefined, 20);
+
       setGames(newGames);
       localStorage.setItem("cached-games", JSON.stringify(newGames));
       setHasMore(true);
-      
+
       if (platform === "chess.com") {
         const avatar = await getChessComUserAvatar(username);
         if (avatar) {
@@ -112,7 +131,7 @@ export default function ProfileSection() {
             setPlatform(plat);
             setHasMore(true);
             localStorage.setItem("cached-games", JSON.stringify(loadedGames));
-            
+
             if (plat === "chess.com") {
               const avatar = await getChessComUserAvatar(user);
               if (avatar) {
@@ -140,8 +159,8 @@ export default function ProfileSection() {
         {games.length > 0 && (
           <>
             <Paper sx={{ p: 3, display: "flex", alignItems: "center", gap: 3 }}>
-              <Avatar 
-                src={userAvatar} 
+              <Avatar
+                src={userAvatar}
                 alt={displayName || username}
                 sx={{ width: 80, height: 80 }}
               />
@@ -150,14 +169,14 @@ export default function ProfileSection() {
                   {displayName || username}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  {platform === "chess.com" ? "Chess.com" : "Lichess"} • {games.length} games loaded
+                  {platform === "chess.com" ? "Chess.com" : "Lichess"} •{" "}
+                  {games.length} games loaded
                 </Typography>
               </Box>
             </Paper>
-            <GamesList 
-              games={games} 
-              username={username} 
-              platform={platform}
+            <GamesList
+              games={games}
+              username={username}
               onLoadMore={loadMoreGames}
               onRefresh={refreshGames}
               hasMore={hasMore}

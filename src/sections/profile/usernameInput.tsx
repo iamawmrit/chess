@@ -31,7 +31,10 @@ export default function UsernameInput({ onGamesLoaded }: Props) {
   });
   const [platform, setPlatform] = useState<"chess.com" | "lichess">(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("chess-platform") as "chess.com" | "lichess") || "chess.com";
+      return (
+        (localStorage.getItem("chess-platform") as "chess.com" | "lichess") ||
+        "chess.com"
+      );
     }
     return "chess.com";
   });
@@ -65,7 +68,7 @@ export default function UsernameInput({ onGamesLoaded }: Props) {
         localStorage.setItem("cached-games", JSON.stringify(games));
         onGamesLoaded(games, username.trim(), platform);
       }
-    } catch (err) {
+    } catch {
       setError(
         `Failed to load games from ${platform}. Please check the username.`
       );
@@ -81,7 +84,7 @@ export default function UsernameInput({ onGamesLoaded }: Props) {
     }
 
     try {
-      const game = getGameFromPgn(pgn);
+      getGameFromPgn(pgn);
       const encodedPgn = encodeURIComponent(pgn);
       router.push(`/analysis?pgn=${encodedPgn}`);
     } catch (err) {
@@ -104,7 +107,9 @@ export default function UsernameInput({ onGamesLoaded }: Props) {
       }}
     >
       <Typography variant="h4" component="h1">
-        {inputMode === "profile" ? "Load Your Chess Profile" : "Analyze a Game from PGN"}
+        {inputMode === "profile"
+          ? "Load Your Chess Profile"
+          : "Analyze a Game from PGN"}
       </Typography>
 
       <ToggleButtonGroup

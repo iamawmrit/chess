@@ -1,5 +1,5 @@
 import { EvaluateGameParams, LineEval, PositionEval } from "@/types/eval";
-import { Game, Player } from "@/types/game";
+import { Player } from "@/types/game";
 import { Chess, PieceSymbol, Square } from "chess.js";
 import { getPositionWinPercentage } from "./engine/helpers/winPercentage";
 import { Color } from "@/types/enums";
@@ -275,19 +275,19 @@ export const getCapturedPieces = (
   const capturedPieces =
     color === Color.White
       ? [
-        { piece: "p", count: 8 },
-        { piece: "b", count: 2 },
-        { piece: "n", count: 2 },
-        { piece: "r", count: 2 },
-        { piece: "q", count: 1 },
-      ]
+          { piece: "p", count: 8 },
+          { piece: "b", count: 2 },
+          { piece: "n", count: 2 },
+          { piece: "r", count: 2 },
+          { piece: "q", count: 1 },
+        ]
       : [
-        { piece: "P", count: 8 },
-        { piece: "B", count: 2 },
-        { piece: "N", count: 2 },
-        { piece: "R", count: 2 },
-        { piece: "Q", count: 1 },
-      ];
+          { piece: "P", count: 8 },
+          { piece: "B", count: 2 },
+          { piece: "N", count: 2 },
+          { piece: "R", count: 2 },
+          { piece: "Q", count: 1 },
+        ];
 
   const fenPiecePlacement = fen.split(" ")[0];
 

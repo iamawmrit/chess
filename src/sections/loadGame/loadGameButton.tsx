@@ -10,7 +10,12 @@ interface Props {
   onClick?: () => void;
 }
 
-export default function LoadGameButton({ setGame, label, size, onClick }: Props) {
+export default function LoadGameButton({
+  setGame,
+  label,
+  size,
+  onClick,
+}: Props) {
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
