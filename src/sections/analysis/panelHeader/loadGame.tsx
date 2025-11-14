@@ -46,7 +46,14 @@ export default function LoadGame() {
       setGamePgn(pgn);
       setBoardOrientation(newOrientation);
     },
-    [joinedGameHistory, resetBoard, setGamePgn, setEval, setBoardOrientation, boardOrientation]
+    [
+      joinedGameHistory,
+      resetBoard,
+      setGamePgn,
+      setEval,
+      setBoardOrientation,
+      boardOrientation,
+    ]
   );
 
   const {
