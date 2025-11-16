@@ -76,7 +76,7 @@ export default function LoadGame() {
         return router.query[param] as string;
       }
       // Fallback for production
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param) || undefined;
       }
@@ -101,12 +101,12 @@ export default function LoadGame() {
 
     const loadGame = async () => {
       // Check both router.query and direct URL parsing
-      const gParam = getQueryParam('g');
-      const idParam = getQueryParam('id');
-      const pgnParamValue = getQueryParam('pgn');
-      const lichessGameIdValue = getQueryParam('lichessGameId');
-      const gameIdValue = getQueryParam('gameId');
-      const platformValue = getQueryParam('platform');
+      const gParam = getQueryParam("g");
+      const idParam = getQueryParam("id");
+      const pgnParamValue = getQueryParam("pgn");
+      const lichessGameIdValue = getQueryParam("lichessGameId");
+      const gameIdValue = getQueryParam("gameId");
+      const platformValue = getQueryParam("platform");
 
       if (typeof gParam === "string" && !!gParam) {
         try {
@@ -143,9 +143,15 @@ export default function LoadGame() {
       } else if (typeof pgnParamValue === "string" && !!pgnParamValue) {
         const orientation = orientationParam === "white" || !orientationParam;
         resetAndSetGamePgn(decodeURIComponent(pgnParamValue), orientation);
-      } else if (typeof lichessGameIdValue === "string" && !!lichessGameIdValue) {
+      } else if (
+        typeof lichessGameIdValue === "string" &&
+        !!lichessGameIdValue
+      ) {
         handleLichess(lichessGameIdValue);
-      } else if (typeof gameIdValue === "string" && typeof platformValue === "string") {
+      } else if (
+        typeof gameIdValue === "string" &&
+        typeof platformValue === "string"
+      ) {
         if (platformValue === "lichess") {
           handleLichess(gameIdValue);
         } else if (platformValue === "chess.com") {
