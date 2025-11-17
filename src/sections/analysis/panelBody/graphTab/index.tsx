@@ -135,7 +135,7 @@ export default function GraphTab(props: GridProps) {
               type="monotone"
               dataKey="value"
               stroke="none"
-              fill="#ffffff"
+              fill="#ffffff3e"
               fillOpacity={1}
               dot={renderDot}
               activeDot={<CustomDot />}

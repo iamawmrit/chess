@@ -1,33 +1,38 @@
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
 import NavMenu from "./NavMenu";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import NavLink from "@/components/NavLink";
-import Image from "next/image";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 interface Props {
   darkMode: boolean;
   switchDarkMode: () => void;
 }
 
 export default function NavBar({ darkMode, switchDarkMode }: Props) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const router = useRouter();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
-    setDrawerOpen(false);
-  }, [router.pathname]);
+    if (!isDesktop) {
+      setMobileDrawerOpen(false);
+    }
+  }, [router.pathname, isDesktop]);
+
+  const drawerOpen = isDesktop ? true : mobileDrawerOpen;
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex" }}>
       <AppBar
         position="static"
         sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
+          display: { xs: "flex", md: "none" },
           backgroundColor: "background.paper",
           color: darkMode ? "white" : "black",
         }}
@@ -40,47 +45,19 @@ export default function NavBar({ darkMode, switchDarkMode }: Props) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: "min(0.5vw, 0.6rem)", padding: 1, my: 1 }}
-            onClick={() => setDrawerOpen((val) => !val)}
+            onClick={() => setMobileDrawerOpen(true)}
           >
             <Icon icon="mdi:menu" />
           </IconButton>
-
-          <Image
-            src="/favicon-32x32.png"
-            alt="Chessrith logo"
-            width={32}
-            height={32}
-          />
-
-          <NavLink href="/">
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                flexGrow: 1,
-                ml: 1,
-                fontSize: { xs: "1rem", sm: "1.25rem" },
-              }}
-            >
-              Chessrith
-            </Typography>
-          </NavLink>
-
-          <IconButton
-            sx={{ ml: "min(0.6rem, 0.8vw)" }}
-            onClick={switchDarkMode}
-            color="inherit"
-            edge="end"
-          >
-            {darkMode ? (
-              <Icon icon="mdi:brightness-7" />
-            ) : (
-              <Icon icon="mdi:brightness-4" />
-            )}
-          </IconButton>
         </Toolbar>
       </AppBar>
-      <NavMenu open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <NavMenu
+        open={drawerOpen}
+        variant={isDesktop ? "permanent" : "temporary"}
+        onClose={() => setMobileDrawerOpen(false)}
+        darkMode={darkMode}
+        switchDarkMode={switchDarkMode}
+      />
     </Box>
   );
 }

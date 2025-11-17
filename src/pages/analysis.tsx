@@ -84,11 +84,12 @@ export default function GameAnalysis() {
         }}
         padding={2}
         style={{
-          maxWidth: "450px",
-          minWidth: "350px",
+          maxWidth: "340px",
+          minWidth: "280px",
+          width: "100%",
         }}
         rowGap={2}
-        height="calc(95vh - 60px)"
+        height="calc(96vh - 40px)"
         display={{ xs: "none", lg: "flex" }}
         flexDirection="column"
         flexWrap="nowrap"
@@ -133,11 +134,12 @@ export default function GameAnalysis() {
         }}
         padding={2}
         style={{
-          maxWidth: "450px",
-          minWidth: "350px",
+          maxWidth: "340px",
+          minWidth: "280px",
+          width: "100%",
         }}
         rowGap={2}
-        height="calc(95vh - 60px)"
+        height="calc(96vh - 40px)"
         display={{ xs: "none", lg: "flex" }}
         flexDirection="column"
         flexWrap="nowrap"

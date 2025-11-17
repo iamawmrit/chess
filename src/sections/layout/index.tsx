@@ -1,15 +1,17 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { PropsWithChildren, useMemo } from "react";
 import NavBar from "./NavBar";
 import { red } from "@mui/material/colors";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { MAIN_THEME_COLOR } from "@/constants";
+import { SIDEBAR_WIDTH } from "./constants";
 
 export default function Layout({ children }: PropsWithChildren) {
-  const [isDarkMode, setDarkMode] = useLocalStorage("useDarkMode", false);
+  const [isDarkMode, setDarkMode] = useLocalStorage("useDarkMode", true);
 
-  const lightPaper = "rgba(248, 251, 255, 0.82)";
-  const darkPaper = "rgba(32, 32, 32, 0.92)";
+  const lightPaper = "rgba(248, 251, 255, 0.31)";
+  const darkPaper = "rgba(18, 18, 18, 0.37)";
   const theme = useMemo(
     () =>
       createTheme({
@@ -22,12 +24,12 @@ export default function Layout({ children }: PropsWithChildren) {
             main: MAIN_THEME_COLOR,
           },
           secondary: {
-            main: isDarkMode ? "#424242" : "#ffffff",
+            main: isDarkMode ? "#4242426d" : "#ffffff39",
           },
           background: {
             default: isDarkMode
-              ? "rgba(17, 17, 17, 0.7)"
-              : "rgba(227, 242, 253, 0.4)",
+              ? "rgba(10, 18, 32, 0.55)"
+              : "rgba(40, 96, 155, 0.32)",
             paper: isDarkMode ? darkPaper : lightPaper,
           },
         },
@@ -51,10 +53,10 @@ export default function Layout({ children }: PropsWithChildren) {
             styleOverrides: {
               root: {
                 backgroundColor: isDarkMode ? darkPaper : lightPaper,
-                backdropFilter: "blur(12px)",
+                backdropFilter: "blur(16px)",
                 boxShadow: isDarkMode
-                  ? "0 12px 40px rgba(0, 0, 0, 0.4)"
-                  : "0 12px 40px rgba(25, 118, 210, 0.12)",
+                  ? "0 20px 48px rgba(0, 0, 0, 0.5)"
+                  : "0 20px 48px rgba(25, 118, 210, 0.2)",
               },
             },
           },
@@ -62,7 +64,7 @@ export default function Layout({ children }: PropsWithChildren) {
             styleOverrides: {
               root: {
                 backgroundColor: isDarkMode ? darkPaper : lightPaper,
-                backdropFilter: "blur(12px)",
+                backdropFilter: "blur(16px)",
               },
             },
           },
@@ -70,6 +72,8 @@ export default function Layout({ children }: PropsWithChildren) {
       }),
     [darkPaper, isDarkMode, lightPaper]
   );
+
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   if (isDarkMode === null) return null;
 
@@ -89,7 +93,20 @@ export default function Layout({ children }: PropsWithChildren) {
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
           zIndex: 0,
-          opacity: isDarkMode ? 0.4 : 0.28,
+          opacity: isDarkMode ? 0.68 : 0.48,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background:
+            "linear-gradient(165deg, rgba(17,40,73,0.75) 0%, rgba(22,58,104,0.45) 50%, rgba(73,128,181,0.35) 100%)",
+          zIndex: 0,
           pointerEvents: "none",
         }}
       />
@@ -98,7 +115,17 @@ export default function Layout({ children }: PropsWithChildren) {
           darkMode={isDarkMode}
           switchDarkMode={() => setDarkMode((val) => !val)}
         />
-        <main style={{ margin: "2vh 1vw" }}>{children}</main>
+        <main
+          style={{
+            marginTop: "1vh",
+            marginRight: "0.75vw",
+            marginBottom: "1vh",
+            marginLeft: isDesktop ? `calc(${SIDEBAR_WIDTH}px + 1.5vw)` : "1vw",
+            transition: "margin-left 0.25s ease",
+          }}
+        >
+          {children}
+        </main>
       </div>
     </ThemeProvider>
   );
