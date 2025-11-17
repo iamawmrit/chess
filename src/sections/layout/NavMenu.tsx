@@ -78,7 +78,12 @@ export default function NavMenu({
           px: 1,
         }}
       >
-        <Image src="/favicon-32x32.png" alt="Chessrith" width={32} height={32} />
+        <Image
+          src="/favicon-32x32.png"
+          alt="Chessrith"
+          width={32}
+          height={32}
+        />
         <Box sx={{ flexGrow: 1 }}>
           <Typography
             variant="h6"

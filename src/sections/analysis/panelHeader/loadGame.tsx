@@ -67,18 +67,18 @@ export default function LoadGame() {
   } = router.query;
 
   useEffect(() => {
-    // Wait for router to be ready before attempting to load game
-    if (!router.isReady) return;
-
-    // Fallback: Parse URL directly for production builds
+    // For static exports (output: "export"), always parse URL directly from window.location
+    // This is more reliable than router.query on page refresh
     const getQueryParam = (param: string): string | undefined => {
+      // For static exports, prioritize window.location.search
+      if (typeof window !== "undefined" && window.location.search) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const value = urlParams.get(param);
+        if (value) return value;
+      }
+      // Fallback to router.query (works when navigating within app)
       if (router.query[param]) {
         return router.query[param] as string;
-      }
-      // Fallback for production
-      if (typeof window !== "undefined") {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param) || undefined;
       }
       return undefined;
     };
@@ -162,6 +162,7 @@ export default function LoadGame() {
 
     loadGame();
   }, [
+    router.isReady,
     pgnParam,
     lichessGameId,
     orientationParam,

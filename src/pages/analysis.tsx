@@ -25,33 +25,34 @@ export default function GameAnalysis() {
   const showMovesTab = game.history().length > 0 || board.history().length > 0;
 
   useEffect(() => {
-    // Wait for router to be ready before checking URL params
+    // For static exports, check client-side URL parameters directly
+    // This is more reliable than router.query which may not be populated on refresh
+    const hasClientSideParams =
+      typeof window !== "undefined" && window.location.search;
+
+    // If we have URL params in the browser, don't redirect
+    if (hasClientSideParams) return;
+
+    // Wait for router to be ready before checking router.query
     if (!router.isReady) return;
 
     const { pgn, lichessGameId, gameId, platform, id, g } = router.query;
-    const hasUrlParams = pgn || lichessGameId || gameId || platform || id || g;
+    const hasRouterParams =
+      pgn || lichessGameId || gameId || platform || id || g;
 
-    // Also check the actual browser URL as fallback for production
-    const urlHasParams =
-      typeof window !== "undefined" &&
-      (window.location.search.includes("pgn=") ||
-        window.location.search.includes("g=") ||
-        window.location.search.includes("id=") ||
-        window.location.search.includes("gameId=") ||
-        window.location.search.includes("lichessGameId="));
-
-    if (!hasUrlParams && !urlHasParams && !showMovesTab) {
-      // Increase timeout for production builds where hydration may be slower
+    // Only consider redirect if no params in router AND no game loaded
+    if (!hasRouterParams && !showMovesTab) {
+      // Give time for game data to load before redirecting
       const timer = setTimeout(() => {
-        // Double-check before redirecting
+        // Final check: ensure no URL params and no game loaded
         if (!showMovesTab && !window.location.search) {
           router.replace("/");
         }
-      }, 1500);
+      }, 1000);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [router, showMovesTab]);
+  }, [router, router.isReady, showMovesTab]);
 
   useEffect(() => {
     if (tab === 1 && !showMovesTab) setTab(0);
